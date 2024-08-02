@@ -1,6 +1,5 @@
 {% set version = "0.0.4.1" %}
 {% set posix = 'm2-' if win else '' %}
-{% set native = 'm2w64-' if win else '' %}
 
 package:
   name: r-allelicseries
@@ -13,8 +12,7 @@ source:
   sha256: 60e60f078e9fd83274ed5462cbb4dc171ccab6a2f968d65fa1bb06133f1437c5
 
 build:
-  merge_build_host: true  # [win]
-  number: 0
+  number: 1
   rpaths:
     - lib/R/lib/
     - lib/
@@ -26,7 +24,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ compiler('cxx') }}            # [not win]
     - {{ compiler('m2w64_cxx') }}      # [win]
     - {{ posix }}filesystem        # [win]
@@ -47,7 +47,6 @@ requirements:
     - r-skat
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
     - r-rnomni
     - r-rcpp
     - r-rcpparmadillo
