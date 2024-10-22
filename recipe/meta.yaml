@@ -1,4 +1,4 @@
-{% set version = "0.0.4.1" %}
+{% set version = "0.1.0.2" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,7 +10,7 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/AllelicSeries_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/AllelicSeries/AllelicSeries_{{ version }}.tar.gz
-  sha256: 60e60f078e9fd83274ed5462cbb4dc171ccab6a2f968d65fa1bb06133f1437c5
+  sha256: d93fa77e9d2d6e74710f32e388ad740b35ed52065d37e6b9d93d5dff8d1a606d
 
 build:
   merge_build_host: true  # [win]
@@ -26,7 +26,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ compiler('cxx') }}            # [not win]
     - {{ compiler('m2w64_cxx') }}      # [win]
     - {{ posix }}filesystem        # [win]
