@@ -38,7 +38,7 @@ requirements:
   host:
     - libblas
     - liblapack
-    - libgomp                      # [linux]
+    - libgomp                      # [not osx]
     - llvm-openmp                  # [osx]
     - r-base
     - r-rnomni
@@ -46,6 +46,7 @@ requirements:
     - r-rcpparmadillo
     - r-skat
   run:
+    - libgomp                      # [win]
     - r-base
     - r-rnomni
     - r-rcpp
