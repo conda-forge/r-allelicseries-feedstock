@@ -1,4 +1,4 @@
-{% set version = "0.0.4.1" %}
+{% set version = "0.1.1.1" %}
 {% set posix = 'm2-' if win else '' %}
 
 package:
@@ -9,54 +9,66 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/AllelicSeries_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/AllelicSeries/AllelicSeries_{{ version }}.tar.gz
-  sha256: 60e60f078e9fd83274ed5462cbb4dc171ccab6a2f968d65fa1bb06133f1437c5
+  sha256: 446feaeef88443c4e0fcf3951b2743164ff9942e17dedff11b5cdf08d1e00652
 
 build:
-  number: 1
+  number: 0
   rpaths:
     - lib/R/lib/
     - lib/
   missing_dso_whitelist:
-    - '*/r.dll'        # [win]
+    - '*/R.dll'        # [win]
     - '*/Rlapack.dll'  # [win]
     - '*/Rblas.dll'    # [win]
 
 requirements:
   build:
-    - {{ compiler('c') }}              # [not win]
-    - {{ stdlib("c") }}                # [not win]
-    - {{ compiler('m2w64_c') }}        # [win]
-    - {{ stdlib("m2w64_c") }}          # [win]
-    - {{ compiler('cxx') }}            # [not win]
-    - {{ compiler('m2w64_cxx') }}      # [win]
+    - {{ compiler('c') }}          # [not win]
+    - {{ stdlib("c") }}            # [not win]
+    - {{ compiler('m2w64_c') }}    # [win]
+    - {{ stdlib("m2w64_c") }}      # [win]
+    - {{ compiler('cxx') }}        # [not win]
+    - {{ compiler('m2w64_cxx') }}  # [win]
     - {{ posix }}filesystem        # [win]
     - {{ posix }}make
     - {{ posix }}sed               # [win]
     - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
     - cross-r-base {{ r_base }}    # [build_platform != target_platform]
-  host:
-    - libblas
-    - liblapack
     - libgomp                      # [not osx]
     - llvm-openmp                  # [osx]
+  host:
     - r-base
-    - r-rnomni
+    - r-compquadform
+    - r-glue
     - r-rcpp
     - r-rcpparmadillo
+    - r-rnomni
     - r-skat
+    - libblas
+    - liblapack
+    - llvm-openmp                  # [osx]
   run:
-    - libgomp                      # [win]
     - r-base
-    - r-rnomni
+    - r-compquadform
+    - r-glue
     - r-rcpp
     - r-rcpparmadillo
+    - r-rnomni
     - r-skat
+    - libgomp                      # [win]
 
 test:
+  requires:
+    - r-testthat
+    - r-withr
+  source_files:
+    - tests/
   commands:
-    - $R -e "library('AllelicSeries')"           # [not win]
-    - "\"%R%\" -e \"library('AllelicSeries')\""  # [win]
+    - $R -e "library('AllelicSeries')"                                                # [not win]
+    - $R -e "testthat::test_file('tests/testthat.R', stop_on_failure=TRUE)"           # [not win]
+    - "\"%R%\" -e \"library('AllelicSeries')\""                                       # [win]
+    - "\"%R%\" -e \"testthat::test_file('tests/testthat.R', stop_on_failure=TRUE)\""  # [win]
 
 about:
   home: https://CRAN.R-project.org/package=AllelicSeries
