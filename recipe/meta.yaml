@@ -17,46 +17,58 @@ build:
     - lib/R/lib/
     - lib/
   missing_dso_whitelist:
-    - '*/r.dll'        # [win]
+    - '*/R.dll'        # [win]
     - '*/Rlapack.dll'  # [win]
     - '*/Rblas.dll'    # [win]
 
 requirements:
   build:
-    - {{ compiler('c') }}              # [not win]
-    - {{ stdlib("c") }}                # [not win]
-    - {{ compiler('m2w64_c') }}        # [win]
-    - {{ stdlib("m2w64_c") }}          # [win]
-    - {{ compiler('cxx') }}            # [not win]
-    - {{ compiler('m2w64_cxx') }}      # [win]
+    - {{ compiler('c') }}          # [not win]
+    - {{ stdlib("c") }}            # [not win]
+    - {{ compiler('m2w64_c') }}    # [win]
+    - {{ stdlib("m2w64_c") }}      # [win]
+    - {{ compiler('cxx') }}        # [not win]
+    - {{ compiler('m2w64_cxx') }}  # [win]
     - {{ posix }}filesystem        # [win]
     - {{ posix }}make
     - {{ posix }}sed               # [win]
     - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
     - cross-r-base {{ r_base }}    # [build_platform != target_platform]
-  host:
-    - libblas
-    - liblapack
     - libgomp                      # [not osx]
     - llvm-openmp                  # [osx]
+  host:
     - r-base
-    - r-rnomni
+    - r-compquadform
+    - r-glue
     - r-rcpp
     - r-rcpparmadillo
+    - r-rnomni
     - r-skat
+    - libblas
+    - liblapack
+    - llvm-openmp                  # [osx]
   run:
-    - libgomp                      # [win]
     - r-base
-    - r-rnomni
+    - r-compquadform
+    - r-glue
     - r-rcpp
     - r-rcpparmadillo
+    - r-rnomni
     - r-skat
+    - libgomp                      # [win]
 
 test:
+  requires:
+    - r-testthat
+    - r-withr
+  source_files:
+    - tests/
   commands:
-    - $R -e "library('AllelicSeries')"           # [not win]
-    - "\"%R%\" -e \"library('AllelicSeries')\""  # [win]
+    - $R -e "library('AllelicSeries')"                                                # [not win]
+    - $R -e "testthat::test_file('tests/testthat.R', stop_on_failure=TRUE)"           # [not win]
+    - "\"%R%\" -e \"library('AllelicSeries')\""                                       # [win]
+    - "\"%R%\" -e \"testthat::test_file('tests/testthat.R', stop_on_failure=TRUE)\""  # [win]
 
 about:
   home: https://CRAN.R-project.org/package=AllelicSeries
