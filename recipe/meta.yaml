@@ -1,4 +1,4 @@
-{% set version = "0.1.1.2" %}
+{% set version = "0.1.1.5" %}
 {% set posix = 'm2-' if win else '' %}
 
 package:
@@ -9,7 +9,7 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/AllelicSeries_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/AllelicSeries/AllelicSeries_{{ version }}.tar.gz
-  sha256: 20108a358d2c198dde13e5f32fcb847f15d964b40f1eaf106c5b821ac6917b22
+  sha256: ebc39c95f08f9b30e4f1d2abee144294be27a5eacace1657b20870f80ba99cd7
 
 build:
   number: 0
